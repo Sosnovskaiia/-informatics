@@ -1,0 +1,243 @@
+2) Реализуйте структуру IpAddress для работы с IPv4 адресацией. Структура должна хранить информацию об IP и маске, а также уметь вычислять адрес подсети, номер компьютера в сети, следующий/предыдущий адрес. В программе должно присутствовать описание структуры и программа показывающая работоспособность структуры.
+#include "IPv4.h"
+	
+
+	ip::ip()
+	{
+	}
+	
+
+	ip::ip(const ip& adress)
+	{
+		n = adress.n;
+		m = adress.m;
+		k = adress.k;
+		d = adress.d;
+		mask = adress.mask;
+	}
+	
+
+	ip::ip(unsigned char _n, unsigned char _m, unsigned char _k, unsigned char _d, unsigned char _mask)
+	{
+		n = _n;
+		m = _m;
+		k = _k;
+		d = _d;
+		mask = _mask;
+	
+
+	}
+	
+
+	ip::~ip()
+	{
+	}
+	
+
+	bool ip::bit(unsigned int a)
+	{
+		switch (a / 8)
+		{
+		case 0:
+			return ((n >> a % 8) & 1);
+			break;
+		case 1:
+			return ((m >> a % 8) & 1);
+			break;
+		case 2:
+			return ((k >> a % 8) & 1);
+			break;
+		case 3:
+			return ((d >> a % 8) & 1);
+			break;
+		default:
+			throw "Incorrect request";
+			break;
+		};
+	}
+	unsigned char ip::hex(unsigned int a)
+	{
+		switch (a / 2)
+		{
+		case 0:
+			return ((n >> (4 * (a % 2) + 3)) & 1) * 8 + ((n >> (4 * (a % 2) + 2)) & 1) * 4 + ((n >> (4 * (a % 2) + 1)) & 1) * 2 + ((n >> (4 * (a % 2))) & 1);
+			break;
+		case 1:
+			return ((m >> (4 * (a % 2) + 3)) & 1) * 8 + ((m >> (4 * (a % 2) + 2)) & 1) * 4 + ((m >> (4 * (a % 2) + 1)) & 1) * 2 + ((m >> (4 * (a % 2))) & 1);
+			break;
+		case 2:
+			return ((k >> (4 * (a % 2) + 3)) & 1) * 8 + ((k >> (4 * (a % 2) + 2)) & 1) * 4 + ((k >> (4 * (a % 2) + 1)) & 1) * 2 + ((k >> (4 * (a % 2))) & 1);
+			break;
+		case 3:
+			return ((d >> (4 * (a % 2) + 3)) & 1) * 8 + ((d >> (4 * (a % 2) + 2)) & 1) * 4 + ((d >> (4 * (a % 2) + 1)) & 1) * 2 + ((d >> (4 * (a % 2))) & 1);
+			break;
+		default:
+			throw "Incorrect request";
+			break;
+		}
+	}
+	
+
+	ip ip::subnet()
+	{
+		unsigned char _n = 0, _m = 0, _k = 0, _d = 0;
+		for (unsigned int i = 0; i < MAX_BITS - mask; i++)
+		{
+			switch (i / 8)
+			{
+			case 0:
+				n += pow(2, 7 - i % 8);
+				break;
+			case 1:
+				m += pow(2, 7 - i % 8);
+				break;
+			case 2:
+				k += pow(2, 7 - i % 8);
+				break;
+			case 3:
+				d += pow(2, 7 - i % 8);
+				break;
+			default:
+				break;
+			};
+		};
+		return ip(_n, _m, _k, _d, mask);
+	}
+	
+
+	ip & ip::operator++()
+	{
+		++this->a;
+		this->b += n / 256;
+		this->c += m / 256;
+		this->d += k / 256;
+		if (this->d / 256 == 1)
+		{
+			this->n = 0;
+			this->m = 0;
+			this->k = 0;
+			this->d = 0;
+			return *this;
+		};
+		this->n %= 256;
+		this->m %= 256;
+		this->k %= 256;
+		return *this;
+	}
+	
+
+	ip & ip::operator--()
+	{
+		this->n;
+		this->m -= n < 0 ? 1 : 0;
+		this->k -= m < 0 ? 1 : 0;
+		this->d -= k < 0 ? 1 : 0;
+		if (d < 0)
+		{
+			this->n = 255;
+			this->m = 255;
+			this->k = 255;
+			this->d = 255;
+			return *this;
+		};
+		this->n += 256;
+		this->n %= 256;
+		this->m += 256;
+		this->m %= 256;
+		this->k += 256;
+		this->k %= 256;
+		return *this;
+	}
+	
+
+	ip& ip::operator=(const ip& adress)
+	{
+		if (this != &adress)
+		{
+			this->n = adress.n;
+			this->m = adress.m;
+			this->k = adress.k;
+			this->d = adress.d;
+			this->mask = adress.mask;
+		}
+		return *this;
+	}
+	
+
+	ip & ip::operator |= (const ip& adress)
+	{
+		this->n |= adress.n;
+		this->m |= adress.m;
+		this->k |= adress.k;
+		this->d |= adress.d;
+		return *this;
+	}
+	
+
+	ip & ip::operator&=(const ip & adress)
+	{
+		this->n &= adress.n;
+		this->m &= adress.m;
+		this->k &= adress.k;
+		this->d &= adress.d;
+		return *this;
+	}
+	
+
+	ip & ip::operator^=(const ip & adress)
+	{
+		this->n ^= adress.n;
+		this->m ^= adress.m;
+		this->k ^= adress.k;
+		this->d ^= adress.d;
+		return *this;
+	}
+	
+
+	ip & ip::operator~()
+	{
+		this->n = ~this->n;
+		this->m = ~this->m;
+		this->k = ~this->k;
+		this->d = ~this->d;
+	};
+	
+
+	ip& operator & (ip l_adress, ip& r_adress)
+	{
+		return l_adress &= r_adress;
+	}
+	
+
+	ip& operator | (ip l_adress, ip & r_adress)
+	{
+		return l_adress |= r_adress;
+	}
+	
+
+	ip & operator ^ (ip l_adress, ip& r_adress)
+	{
+		return l_adress ^= r_adress;
+	}
+	
+
+	std::istream& operator >> (std::istream& is, ip& adress)
+	{
+		unsigned short int tmp;
+		is >> tmp;
+		adress.a = tmp;
+		is >> tmp;
+		adress.b = tmp;
+		is >> tmp;
+		adress.c = tmp;
+		is >> tmp;
+		adress.d = tmp;
+		return is;
+	}
+	
+
+	std::ostream & operator<<(std::ostream & os, const ip & adress)
+	{
+		os << (int)adress.n << '.' << (int)adress.m << '.' << (int)adress.k << '.' << (int)adress.d;
+		return os;
+	}
