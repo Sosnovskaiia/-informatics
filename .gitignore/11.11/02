@@ -1,0 +1,30 @@
+/*Напишите программу, вычисляющую произведение цифр целого числа, чётность которых совпадает с чётностью последней цифры.*/
+#include <iostream>
+#include <cstring>
+ 
+using namespace std;
+int charToInt(char c){
+   return c - '0';
+}
+int main()
+{
+   string n;
+   cin>>n;
+   int sum=1;
+   int k;
+   k=charToInt(n.at(n.length()-1))%2;
+   for(int i=0;i<n.length();i++)
+   {
+       
+       int m;
+       m=charToInt(n.at(i));
+       if(m%2==k)
+           sum*=m;
+           
+       
+   }
+   
+cout<<sum; 
+   return 0;
+}
+ 
