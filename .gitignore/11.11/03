@@ -1,0 +1,35 @@
+/*Напишите программу, вычисляющую биномиальный коэффициент из n по к. В программе нельзя использовать числа, превышающие итоговое значение.*/
+ 
+#include <iostream>
+#include <cstring>
+ 
+using namespace std;
+int charToInt(char c){
+   return c - '0';
+}
+int main()
+{   int n,k;
+   cin>>n>>k;
+   
+   if(n>=k){
+   
+   
+   int i;
+   float c=1;
+   int res = 1;
+   int res2=1;
+   int res3=1;
+   for (i = 1; i <= n; i++)
+​    res = res * i;
+   for (i = 1; i <= k; i++)
+​    res2 = res2 * i;
+​for (i = 1; i <= (n-k); i++)
+​    res3 = res3 * i;    
+​    
+   c=(float)res/(res2*res3);
+   cout<<c;
+   } else cout<<"ошибка";
+   
+   return 0;
+}
+ 
