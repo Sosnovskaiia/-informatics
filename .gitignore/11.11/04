@@ -1,0 +1,38 @@
+/*Напишите программу, находящую сумму простых элементов массива.*/
+#include <iostream>
+#include <cstring>
+ 
+using namespace std;
+int charToInt(char c)
+{
+   return c - '0';
+}
+ 
+bool numberSimple(int n)
+{   int i;
+if(n==1)
+return false;
+ 
+   for(i=2;i<n;i++)
+   {
+       if(n%i==0)
+           return false;
+   }
+   
+   return true;
+}
+ 
+int main()
+{   int n,k,sum=0;
+   int a[5]={1,2,3,4,5};
+   for(int i=0;i<sizeof(a)/sizeof(int);i++)
+   {
+       if(numberSimple(a[i])==true)
+       sum+=a[i];
+   }
+ 
+   cout<<sum;
+   return 0;
+}
+ 
+ 
