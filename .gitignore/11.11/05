@@ -1,0 +1,39 @@
+/*Напишите программу, заменяющую составные числа на их самые большие простые делители.*/
+#include <iostream>
+ 
+using namespace std;
+ 
+ 
+bool proverka(int n)
+{
+   for(int i=2;i<n;i++)
+   {
+       if(n%i==0)
+           return true;
+   }
+   return false;
+}
+int delitel(int n)
+{ for (int i=n-1;i>1;i--)
+   { if(n%i==0)
+     return i;
+   }
+   return 1;
+}
+ 
+int main()
+{  bool t;
+  int r;
+  int m;
+  cin>>m;
+  t=proverka(m);
+  if(t==true)
+  { r=delitel(m);
+   cout<<r;
+  }else cout<< "простое";
+ 
+   return 0;
+}
+ 
+ 
+
