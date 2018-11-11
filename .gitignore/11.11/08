@@ -1,0 +1,42 @@
+/*Напишите две функции, находящие приближенное значение квадратного и кубического корня. В программе не должны использоваться математические библиотеки.*/
+#include <iostream>
+ 
+using namespace std;
+float st(float l,int n)
+{   float b=1;
+   for (int i=0;i<n;i++)
+  { b*=l;
+  }
+  return b;
+}
+ 
+float cub(float a)
+{float x;
+   x=a;
+   float n=3;
+   for(int i=0;i<=100;i++)
+   {
+       x=1/n*( (n-1)*x+a/st(x,n-1));
+       
+   }
+   return x;
+}
+float kvadrat(float a)
+{float x;
+   x=a;
+   float n=2;
+   for(int i=0;i<=100;i++)
+   {
+       x=1/n*( (n-1)*x+a/st(x,n-1));
+       
+   }
+   return x;
+}
+int main()
+{   float a;
+   cin>>a;
+   
+   cout<<cub(a)<<endl<<kvadrat(a);
+ 
+   return 0;
+}
