@@ -1,0 +1,24 @@
+/*Напишите программу находящую первые n составных чисел.*/
+
+#include <iostream>
+using namespace std;
+int main ()
+{
+    
+    int t, n, m = 0; 
+    
+    cin >> n; 
+    for (t = 4; m < n; t++) 
+    {
+        for (int i = 2; i < t; i++)
+        {
+            if ((t % i) == 0)
+            {
+                cout << t << ' ';
+                m++;
+                break;
+            }
+        }
+    } 
+    return 0;
+}
